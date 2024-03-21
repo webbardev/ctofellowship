@@ -18,7 +18,7 @@ describe('<Button />', () => {
         // see: https://on.cypress.io/mounting-react
         cy.mount(
             <Button href="/" testId="test-button">
-                Hello href;
+                Hello href
             </Button>
         );
 
