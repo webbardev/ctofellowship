@@ -1,12 +1,11 @@
 import '../styles/globals.scss';
 import 'react-toastify/dist/ReactToastify.css';
-import type {AppProps} from 'next/app';
-import React, {useEffect, useState} from 'react';
+import type { AppProps } from 'next/app';
+import React, { useEffect, useState } from 'react';
 
-import {RecoilRoot} from 'recoil';
-import {QueryClient, QueryClientProvider} from 'react-query';
-import {MapProvider} from 'react-map-gl';
-import {SWUpdater} from '../src/components/pwa/SWUpdater';
+import { RecoilRoot } from 'recoil';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { MapProvider } from 'react-map-gl';
 import dynamic from 'next/dynamic';
 
 const MyApp = ({ Component, pageProps }: AppProps): unknown => {
@@ -41,14 +40,12 @@ const MyApp = ({ Component, pageProps }: AppProps): unknown => {
         },
     });
 
-
     return (
         <QueryClientProvider client={queryClient}>
             <RecoilRoot>
                 <MapProvider>
                     <RecoilizeDebugger root={root} />
                     <Component {...pageProps} />
-                    <SWUpdater />
                 </MapProvider>
             </RecoilRoot>
         </QueryClientProvider>
