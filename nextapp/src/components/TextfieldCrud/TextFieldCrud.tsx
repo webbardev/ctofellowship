@@ -13,22 +13,26 @@ export const TextFieldCrud: React.FC<ITextFieldCrud> = (props) => {
 
     const [isValid, setIsValid] = useState<boolean>(true);
 
-    const handleValidationAndValueChange = useCallback(
+    const handleValidation = useCallback((valueToCheck: string) => {
+        const regex = /^[a-zA-Z0-9]*$/;
+
+        if (!regex.test(valueToCheck)) {
+            setIsValid(false);
+            setShowValidation(true);
+        } else {
+            setIsValid(true);
+            setShowValidation(false);
+        }
+    }, []);
+
+    const handleValueChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
-            // Check if input is valid
-            const regex = /^[a-zA-Z0-9]*$/;
+            const newValue = event.target.value;
 
-            if (!regex.test(event.target.value)) {
-                setIsValid(false);
-                setShowValidation(true);
-            } else {
-                setIsValid(true);
-                setShowValidation(false);
-            }
-
-            setValue(event.target.value);
+            handleValidation(newValue);
+            setValue(newValue);
         },
-        []
+        [handleValidation]
     );
 
     const submitIfValid = useCallback(() => {
@@ -53,7 +57,7 @@ export const TextFieldCrud: React.FC<ITextFieldCrud> = (props) => {
                 data-test-id="textfieldcrud-input"
                 data-test-validation={isValid ? '1' : '0'}
                 value={value}
-                onChange={handleValidationAndValueChange}
+                onChange={handleValueChange}
             />
             <button
                 className="rounded bg-neutral-700 p-2 text-white"
