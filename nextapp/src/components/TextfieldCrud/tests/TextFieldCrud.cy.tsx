@@ -3,7 +3,7 @@ import { TextFieldCrud } from '../TextFieldCrud';
 
 describe('<TextFieldCrud />', () => {
     it('Textfields renders and is type-able', () => {
-        cy.mount(<TextFieldCrud />);
+        cy.mount(<TextFieldCrud changeAction={() => {}} />);
 
         cy.get('[data-test-id="textfieldcrud-input"]', { timeout: 500 })
             .scrollIntoView()
@@ -19,7 +19,7 @@ describe('<TextFieldCrud />', () => {
     });
 
     it('Textfield only accepts [a-zA-Z0-9], validation will be turned on', () => {
-        cy.mount(<TextFieldCrud />);
+        cy.mount(<TextFieldCrud changeAction={() => {}} />);
 
         cy.get('[data-test-id="textfieldcrud-input"]', { timeout: 500 })
             .clear()
@@ -32,6 +32,7 @@ describe('<TextFieldCrud />', () => {
 
         cy.get('[data-test-id="textfieldcrud-button"]', { timeout: 500 }).should('be.disabled');
 
+        // ✅ Check if text was correctly sanitized
         cy.get('[data-test-id="textfieldcrud-input"]', { timeout: 500 })
             .clear()
             .type('HelloWorld007');

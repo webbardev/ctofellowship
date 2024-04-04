@@ -1,30 +1,42 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import '../../../styles/globals.scss';
 
-interface ITextFieldCrud {}
+interface ITextFieldCrud {
+    changeAction: (value: string) => void;
+}
 
-export const TextFieldCrud: React.FC<ITextFieldCrud> = () => {
+export const TextFieldCrud: React.FC<ITextFieldCrud> = (props) => {
+    const { changeAction } = props;
+
     const [value, setValue] = useState('');
     const [showValidation, setShowValidation] = useState(false);
 
     const [isValid, setIsValid] = useState<boolean>(true);
 
-    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        // Check if input is valid
-        const regex = /^[a-zA-Z0-9]*$/;
+    const handleValidationAndValueChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            // Check if input is valid
+            const regex = /^[a-zA-Z0-9]*$/;
 
-        if (!regex.test(event.target.value)) {
-            setIsValid(false);
-            setShowValidation(true);
-        } else {
-            setIsValid(true);
-            setShowValidation(false);
+            if (!regex.test(event.target.value)) {
+                setIsValid(false);
+                setShowValidation(true);
+            } else {
+                setIsValid(true);
+                setShowValidation(false);
+            }
+
+            setValue(event.target.value);
+        },
+        []
+    );
+
+    const submitIfValid = useCallback(() => {
+        if (isValid) {
+            changeAction(value);
+            setValue('');
         }
-
-        setValue(event.target.value);
-    }, []);
-
-    const handleSubmit = useCallback(() => {}, []);
+    }, [changeAction, isValid, value]);
 
     const validationStyles = useMemo(() => {
         if (showValidation && !isValid) {
@@ -41,12 +53,12 @@ export const TextFieldCrud: React.FC<ITextFieldCrud> = () => {
                 data-test-id="textfieldcrud-input"
                 data-test-validation={isValid ? '1' : '0'}
                 value={value}
-                onChange={handleChange}
+                onChange={handleValidationAndValueChange}
             />
             <button
                 className="rounded bg-neutral-700 p-2 text-white"
                 data-test-id="textfieldcrud-button"
-                onClick={handleSubmit}
+                onClick={submitIfValid}
                 disabled={!isValid}
             >
                 Submit
