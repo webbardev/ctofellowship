@@ -47,6 +47,7 @@ export const TextFieldCrud: React.FC<ITextFieldCrud> = () => {
                 className="rounded bg-neutral-700 p-2 text-white"
                 data-test-id="textfieldcrud-button"
                 onClick={handleSubmit}
+                disabled={!isValid}
             >
                 Submit
             </button>
